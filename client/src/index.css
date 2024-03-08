@@ -1,0 +1,32 @@
+body{
+  font-family: cursive, Arial, Helvetica, sans-serif ;
+}
+
+#start-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.start-btn{
+  background-color: rgb(167, 3, 3);
+  color: white;
+  height: 54px;
+  width: 170px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.1em;
+  margin-bottom: 7px;
+}
+
+.start-btn:hover{
+  background-color: rgb(73, 2, 2);
+}
+
+
+#waldo{
+  margin-left: 30px;
+  height: 300px;
+  width: 430px;
+}
