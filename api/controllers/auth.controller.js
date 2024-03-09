@@ -33,7 +33,7 @@ const signUp = [
       const err = validationResult(req);
       if (!err.isEmpty()) {
         res.status(400).json({
-          username,
+          status: 400,
           errors: err.array(),
         });
         return;
@@ -46,7 +46,10 @@ const signUp = [
             const newUser = new User({ username, password: hashedPassword });
             try {
               await newUser.save();
-              res.status(201).json({message: "User created successfully"});
+              res.status(201).json({
+                status:201,
+                message: "User created successfully"
+              });
             } catch (error) {
               next(error);
             };
