@@ -1,3 +1,4 @@
+import Char from "../models/char.model.js";
 import User from "../models/user.model.js";
 
 const users = async(req, res, next) =>{
@@ -16,4 +17,18 @@ const users = async(req, res, next) =>{
   };
 };
 
-export {users};
+const makeChar = async(req,res,next) => {
+  const {name, xPercent, yPercent} = req.body;
+  try {
+    const newChar = new Char({name, xPercent, yPercent});
+    await newChar.save();
+    res.status(201).json({
+      status:201,
+      message: "Character created successfully"
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export {users, makeChar};

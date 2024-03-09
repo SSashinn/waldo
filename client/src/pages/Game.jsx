@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import ImageSelector from "../ImageSelector";
 
 export default function Game() {
   const formatTime = (milliseconds) => {
@@ -17,6 +18,10 @@ export default function Game() {
     return () => clearInterval(interval);
   },[])
 
+  const handleSelectionChange = (selection) => {
+    console.log("Selected area:", selection);
+  };
+
   return (
     <div>
       <div className="timer-heading-container">
@@ -26,8 +31,9 @@ export default function Game() {
             <h3>Try to find waldo as soon as possible</h3>
           </div>
       </div>
+      <ImageSelector imageUrl="findWaldo.jpg?url" onSelectionChange={handleSelectionChange} />
 
-      <img src="findWaldo.jpg?url" className="find-waldo-img"/>
+      {/* <img src="findWaldo.jpg?url" className="find-waldo-img" onClick={handleSelectionChange}/> */}
       </div>  
   )
 }
