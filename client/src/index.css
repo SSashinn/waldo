@@ -37,3 +37,49 @@ body{
   justify-content: space-between;
   width: 20vw;
 }
+
+.title{
+  margin-left: 12vw;
+}
+.form{
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  width: 27vw;
+}
+
+.input-field{
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  height: 7vh;
+  width: 30vw;
+  background-color: rgb(247, 219, 179);
+  font-size: 1.1em;
+  padding-left: 5px;
+}
+
+.submit-button, .google{
+  height: 7vh;
+  width: 30vw;
+  background-color: #fabc6b;
+  cursor: pointer;
+  border: none;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.submit-button:hover{
+  background-color: #f09d32;
+}
+
+.google{
+  margin-top: 10px;
+  background-color: darkred;
+  color: white;
+}
+
+.google:hover{
+  background-color: rgb(89, 1, 1);
+}
