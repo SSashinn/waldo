@@ -44,7 +44,9 @@ export default function Home() {
       <div id='start-container'>
         <img src='waldo.png?url' id='waldo-image' />
         <h2>WHERE IS WALDO?</h2>
-        <button type="button" className='start-btn'>START NOW</button>
+        <Link to={'/game'}>
+          <button type="button" className='start-btn'>START NOW</button>
+        </Link>
         <div id='auth-link'>
           <span>Want to save your highscore, then </span>
           <Link to='/signup'><span>signup</span></Link>

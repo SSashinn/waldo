@@ -1,4 +1,6 @@
 body{
+  margin: 0;
+  padding: 0;
   font-family: cursive, Arial, Helvetica, sans-serif ;
 }
 
@@ -88,4 +90,20 @@ body{
   color: red;
   font-weight: bold;
   font-size: 1.3em;
+}
+
+.timer-heading-container{
+  display: grid;
+  grid-template-columns: 30vw 40vw;
+  gap: 130px;
+  padding: 10px;
+}
+
+
+.find-waldo-img{
+  height: 120vh;
+  width: 95vw;
+  border: 5px solid black;
+  border-radius: 15px;
+  margin-left: 2vw;
 }
