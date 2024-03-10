@@ -29,6 +29,19 @@ const makeChar = async(req,res,next) => {
   } catch (error) {
     next(error);
   }
+};
+
+const getChar = async(req, res,next) => {
+  try {
+    const chars = await Char.find().exec();
+    const formattedChar = chars.map(char => {
+      const { name, _id } = char;
+      return {name, _id};
+    });
+    res.status(200).json({chars: formattedChar});
+  } catch(error) {
+    next(error);
+  }
 }
 
-export {users, makeChar};
+export {users, makeChar, getChar};

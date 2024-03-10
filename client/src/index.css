@@ -106,4 +106,39 @@ body{
   border: 5px solid black;
   border-radius: 15px;
   margin-left: 2vw;
+  cursor: pointer;
 }
+
+#bg{
+  height: 141.9vh;
+  width: 98.9vw;
+  background: black;
+  opacity: 0.7;
+  position: absolute;
+  top: 0vh;
+  left: 0vw;
+  overflow: hidden;
+  overflow-wrap: break-word;
+}
+
+.select-char-container{
+  background-color: antiquewhite;
+  height: auto;
+  width: 10vw;
+  border: 2px solid black;
+  position: absolute;
+  top: 50vh;
+  left: 43vw;
+  border-radius: 10px;
+  font-size: 1.3em;
+  font-weight: bold;
+  opacity: 1;
+}
+
+.char-name{
+  cursor: pointer;
+  list-style: none;
+  text-align: center;
+  margin: 10px;
+}
+

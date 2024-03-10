@@ -1,7 +1,13 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import ImageSelector from "../ImageSelector";
+import SelectChar from "../SelectChar";
 
 export default function Game() {
+  const [showSelectChar, setShowSelectChar] = useState(false);
+  const [time, setTime] = useState(0);
+  const selectCharRef = useRef(null);
+
+
   const formatTime = (milliseconds) => {
     const hours = Math.floor(milliseconds / (1000 * 60 * 60));
     const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
@@ -10,16 +16,33 @@ export default function Game() {
     return `${hours}hr ${minutes}min ${seconds}sec ${ms}ms`
   }
 
-  const [time, setTime] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(prevTime => prevTime + 100)
     }, 100);
     return () => clearInterval(interval);
-  },[])
+  },[]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectCharRef.current && !selectCharRef.current.contains(event.target)) {
+        setShowSelectChar(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleSelectionChange = (selection) => {
     console.log("Selected area:", selection);
+    setShowSelectChar(true);
+  };
+
+  const handleClosePopup = () => {
+    setShowSelectChar(false);
   };
 
   return (
@@ -33,7 +56,7 @@ export default function Game() {
       </div>
       <ImageSelector imageUrl="findWaldo.jpg?url" onSelectionChange={handleSelectionChange} />
 
-      {/* <img src="findWaldo.jpg?url" className="find-waldo-img" onClick={handleSelectionChange}/> */}
+      {showSelectChar && <div ref={selectCharRef}><SelectChar onClose={handleClosePopup} /></div>}
       </div>  
   )
 }
