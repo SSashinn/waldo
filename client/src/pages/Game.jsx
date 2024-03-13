@@ -19,7 +19,7 @@ export default function Game() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(prevTime => prevTime + 100)
+      setTime(prevTime => prevTime + 100);
     }, 100);
     return () => clearInterval(interval);
   },[]);

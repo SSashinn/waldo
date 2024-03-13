@@ -142,3 +142,6 @@ body{
   margin: 10px;
 }
 
+.cross-char{
+  text-decoration: line-through dashed;
+}
