@@ -6,7 +6,8 @@ export default function Game() {
   const [showSelectChar, setShowSelectChar] = useState(false);
   const [time, setTime] = useState(0);
   const selectCharRef = useRef(null);
-
+  const [xPercent, setXPercent] = useState(null);
+  const [yPercent, setYPercent] = useState(null);
 
   const formatTime = (milliseconds) => {
     const hours = Math.floor(milliseconds / (1000 * 60 * 60));
@@ -23,6 +24,7 @@ export default function Game() {
     return () => clearInterval(interval);
   },[]);
 
+  // To show popup with list of characters when image is clicked
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (selectCharRef.current && !selectCharRef.current.contains(event.target)) {
@@ -37,7 +39,8 @@ export default function Game() {
   }, []);
 
   const handleSelectionChange = (selection) => {
-    console.log("Selected area:", selection);
+    setXPercent(() => selection.xPercent);
+    setYPercent(() => selection.yPercent);
     setShowSelectChar(true);
   };
 
@@ -56,7 +59,13 @@ export default function Game() {
       </div>
       <ImageSelector imageUrl="findWaldo.jpg?url" onSelectionChange={handleSelectionChange} />
 
-      {showSelectChar && <div ref={selectCharRef}><SelectChar onClose={handleClosePopup} /></div>}
+      {showSelectChar && <div ref={selectCharRef}>
+        <SelectChar 
+        onClose={handleClosePopup} 
+        onSelect={handleSelectionChange} 
+        xPercent={xPercent}
+        yPercent={yPercent}/>
+        </div>}
       </div>  
   )
 }

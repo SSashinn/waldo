@@ -1,7 +1,7 @@
 import Char from "../models/char.model.js";
 import User from "../models/user.model.js";
 
-const users = async(req, res, next) =>{
+const users = async (req, res, next) => {
   try {
     const foundUsers = await User.find().sort('highScore').limit(10).exec();
     const formattedUsers = foundUsers.map(user => {
@@ -17,13 +17,13 @@ const users = async(req, res, next) =>{
   };
 };
 
-const makeChar = async(req,res,next) => {
-  const {name, xPercent, yPercent} = req.body;
+const makeChar = async (req, res, next) => {
+  const { name, xPercent, yPercent } = req.body;
   try {
-    const newChar = new Char({name, xPercent, yPercent});
+    const newChar = new Char({ name, xPercent, yPercent });
     await newChar.save();
     res.status(201).json({
-      status:201,
+      status: 201,
       message: "Character created successfully"
     });
   } catch (error) {
@@ -31,17 +31,33 @@ const makeChar = async(req,res,next) => {
   }
 };
 
-const getChar = async(req, res,next) => {
+const getChar = async (req, res, next) => {
   try {
     const chars = await Char.find().exec();
     const formattedChar = chars.map(char => {
       const { name, _id } = char;
-      return {name, _id};
+      return { name, _id };
     });
-    res.status(200).json({chars: formattedChar});
-  } catch(error) {
+    res.status(200).json({ chars: formattedChar });
+  } catch (error) {
     next(error);
   }
-}
+};
 
-export {users, makeChar, getChar};
+const verifyCoordinate = async (req, res, next) => {
+  try {
+    const { name, xPercent, yPercent } = req.body;
+    const nameData = await Char.findOne({ name }).exec();
+    if (!nameData)
+      res.status(400).json({ status: 400, error: "Invalid Character" })
+    if ((xPercent <= nameData.xPercent + 1 && xPercent >= nameData.xPercent - 1) && (yPercent <= nameData.yPercent + 3 && yPercent >= nameData.yPercent - 3))
+      res.status(200).json({ status: 200, message: 'Correct'});
+    else
+      res.status(400).json({ status: 400, message: 'Incorrect'});
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+export { users, makeChar, getChar, verifyCoordinate };
