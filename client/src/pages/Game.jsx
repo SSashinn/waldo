@@ -8,6 +8,8 @@ export default function Game() {
   const selectCharRef = useRef(null);
   const [xPercent, setXPercent] = useState(null);
   const [yPercent, setYPercent] = useState(null);
+  const [chars, setChars] = useState([]);
+  const [error, setError] = useState(null);
 
   const formatTime = (milliseconds) => {
     const hours = Math.floor(milliseconds / (1000 * 60 * 60));
@@ -17,6 +19,30 @@ export default function Game() {
     return `${hours}hr ${minutes}min ${seconds}sec ${ms}ms`
   }
 
+  //  Get list of character
+  async function fetchData() {
+    try {
+      const res = await fetch('http://localhost:3000/v1/api/chars', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!res.ok) {
+        throw new Error('Failed to fetch');
+      }
+      const data = await res.json();
+      setChars(data);
+    } catch (error) {
+      setError(error);
+    } 
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Create a timer
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(prevTime => prevTime + 100);
@@ -57,7 +83,15 @@ export default function Game() {
             <h3>Try to find waldo as soon as possible</h3>
           </div>
       </div>
-      <ImageSelector imageUrl="findWaldo.jpg?url" onSelectionChange={handleSelectionChange} />
+      <div className="main-content">
+        <div className="char-info">
+          <p>{error ? error.message: ''}</p>
+          {chars.chars && chars.chars.map((item) => (
+            <p key={item._id} className={`char-name`}>{item.name}</p>
+          ))}
+        </div>
+        <ImageSelector imageUrl="findWaldo.jpg?url" onSelectionChange={handleSelectionChange} />
+      </div>
 
       {showSelectChar && <div ref={selectCharRef}>
         <SelectChar 

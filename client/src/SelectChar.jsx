@@ -103,7 +103,7 @@ export default function SelectChar({ onClose, xPercent, yPercent }) {
 
   return (
     <div id="bg" ref={bgRef} onClick={handleClickOutside}>
-      <div className='select-char-container'  >
+      <div className='select-char-container'>
         {formData.chars && formData.chars.map((item) => (
           // <p key={item._id} className='char-name' onClick={(e) => handleSubmit(e, item.name, xPercent, yPercent)}>{item.name}</p>
           <p key={item._id} className={`char-name ${correctElements[item._id] ? 'cross-char' : ''}`} onClick={(e) => handleSubmit(e, item.name, xPercent, yPercent, item._id)}>{item.name}</p>

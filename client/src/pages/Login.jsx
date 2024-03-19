@@ -19,11 +19,12 @@ export default function Login() {
         },
         body: JSON.stringify(formData), 
       });
-      const data = await res.json();
 
+      const data = await res.json();
+      console.log(data)
        // If there is an error, we will store it to display to the user later
-       if (data.status !== 201) {
-        setError(data.errors[0].msg);
+       if (data.status >=400) {
+        setError(data.message);
         setLoading(false);
         return;
        }
@@ -32,7 +33,7 @@ export default function Login() {
       // Setting any previous error to null so we don't display it on screen
       setError(null);
       // we will redirect user to home page
-      navigate('/'); 
+      // navigate('/'); 
     } catch (error) {
       setLoading(false);
       setError(error.errors);
