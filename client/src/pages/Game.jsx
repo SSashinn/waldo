@@ -39,7 +39,6 @@ export default function Game() {
       const data = await res.json();
       const updatedData = data.chars.map(char => ({ ...char, checked: false }));
       setChars(updatedData);
-      console.log(updatedData);
     } catch (error) {
       setError(error);
     } 

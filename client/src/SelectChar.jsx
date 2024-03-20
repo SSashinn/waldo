@@ -38,7 +38,8 @@ export default function SelectChar({ onClose, xPercent, yPercent, chars, setGame
         chars.map(item => {
           if(item.name === name)
             item.checked = true;
-        const checkDone = chars.filter(item => item.checked = false)
+        const checkDone = chars.filter(item => item.checked === false)
+        console.log(checkDone)
         if (checkDone.length === 0)
           setGameOver();
         })
