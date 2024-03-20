@@ -2,9 +2,10 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const CharSchema = new Schema({
-  name: {type: String, required: true},
-  xPercent: {type: Number, required: true},
-  yPercent: {type: Number, required: true},
+  name: { type: String, required: true },
+  xPercent: { type: Number, required: true },
+  yPercent: { type: Number, required: true },
+  imgUrl: { type: String, required: true },
 });
 
 const Char = mongoose.model('Char', CharSchema);

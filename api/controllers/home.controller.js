@@ -35,8 +35,8 @@ const getChar = async (req, res, next) => {
   try {
     const chars = await Char.find().exec();
     const formattedChar = chars.map(char => {
-      const { name, _id } = char;
-      return { name, _id };
+      const { name, _id, imgUrl } = char;
+      return { name, imgUrl, _id };
     });
     res.status(200).json({ chars: formattedChar });
   } catch (error) {
@@ -50,7 +50,7 @@ const verifyCoordinate = async (req, res, next) => {
     const nameData = await Char.findOne({ name }).exec();
     if (!nameData)
       res.status(400).json({ status: 400, error: "Invalid Character" })
-    if ((xPercent <= nameData.xPercent + 1 && xPercent >= nameData.xPercent - 1) && (yPercent <= nameData.yPercent + 3 && yPercent >= nameData.yPercent - 3))
+    if ((xPercent <= nameData.xPercent + 2 && xPercent >= nameData.xPercent - 2) && (yPercent <= nameData.yPercent + 3 && yPercent >= nameData.yPercent - 3))
       res.status(200).json({ status: 200, message: 'Correct'});
     else
       res.status(400).json({ status: 400, message: 'Incorrect'});

@@ -8,6 +8,13 @@ export default function Game() {
   const selectCharRef = useRef(null);
   const [xPercent, setXPercent] = useState(null);
   const [yPercent, setYPercent] = useState(null);
+  const [chars, setChars] = useState([]);
+  const [error, setError] = useState(null);
+  const[gameOver, setGameOver] = useState(false);
+
+  const handleGameOver = () => {
+    setGameOver(true);
+  }
 
   const formatTime = (milliseconds) => {
     const hours = Math.floor(milliseconds / (1000 * 60 * 60));
@@ -17,12 +24,39 @@ export default function Game() {
     return `${hours}hr ${minutes}min ${seconds}sec ${ms}ms`
   }
 
+  //  Get list of character
+  async function fetchData() {
+    try {
+      const res = await fetch('http://localhost:3000/v1/api/chars', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!res.ok) {
+        throw new Error('Failed to fetch');
+      }
+      const data = await res.json();
+      const updatedData = data.chars.map(char => ({ ...char, checked: false }));
+      setChars(updatedData);
+    } catch (error) {
+      setError(error);
+    } 
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Create a timer
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(prevTime => prevTime + 100);
     }, 100);
+    if (gameOver)
+      clearInterval(interval);
     return () => clearInterval(interval);
-  },[]);
+  },[gameOver]);
 
   // To show popup with list of characters when image is clicked
   useEffect(() => {
@@ -57,14 +91,27 @@ export default function Game() {
             <h3>Try to find waldo as soon as possible</h3>
           </div>
       </div>
-      <ImageSelector imageUrl="findWaldo.jpg?url" onSelectionChange={handleSelectionChange} />
+      <div className="main-content">
+        <div className="char-info">
+          <p>{error ? error.message: ''}</p>
+          {chars && chars.map((item) => (
+            <div key={item._id}>
+              <img src={item.imgUrl} height='100px' width='100px'/>
+              <p key={item._id} className={`char-name ${item.checked ? 'checked' : ''}`}>{item.name}</p>
+            </div>
+          ))}
+        </div>
+        <ImageSelector imageUrl="findWaldo.jpg?url" onSelectionChange={handleSelectionChange} />
+      </div>
 
       {showSelectChar && <div ref={selectCharRef}>
         <SelectChar 
         onClose={handleClosePopup} 
         onSelect={handleSelectionChange} 
         xPercent={xPercent}
-        yPercent={yPercent}/>
+        yPercent={yPercent}
+        chars={chars}
+        setGameOver={handleGameOver}/>
         </div>}
       </div>  
   )
