@@ -95,7 +95,10 @@ export default function Game() {
         <div className="char-info">
           <p>{error ? error.message: ''}</p>
           {chars && chars.map((item) => (
-            <p key={item._id} className='char-name'>{item.name}</p>
+            <div key={item._id}>
+              <img src={item.imgUrl} height='100px' width='100px'/>
+              <p key={item._id} className='char-name'>{item.name}</p>
+            </div>
           ))}
         </div>
         <ImageSelector imageUrl="findWaldo.jpg?url" onSelectionChange={handleSelectionChange} />
