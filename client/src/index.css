@@ -145,7 +145,7 @@ body{
   font-size: 1.5em;
 }
 
-.cross{
+.checked{
   text-decoration: line-through dashed;
 }
 .popup-char-name{

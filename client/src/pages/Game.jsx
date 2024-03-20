@@ -97,7 +97,7 @@ export default function Game() {
           {chars && chars.map((item) => (
             <div key={item._id}>
               <img src={item.imgUrl} height='100px' width='100px'/>
-              <p key={item._id} className='char-name'>{item.name}</p>
+              <p key={item._id} className={`char-name ${item.checked ? 'checked' : ''}`}>{item.name}</p>
             </div>
           ))}
         </div>
