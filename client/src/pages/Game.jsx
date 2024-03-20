@@ -10,6 +10,11 @@ export default function Game() {
   const [yPercent, setYPercent] = useState(null);
   const [chars, setChars] = useState([]);
   const [error, setError] = useState(null);
+  const[gameOver, setGameOver] = useState(false);
+
+  const handleGameOver = () => {
+    setGameOver(true);
+  }
 
   const formatTime = (milliseconds) => {
     const hours = Math.floor(milliseconds / (1000 * 60 * 60));
@@ -32,7 +37,9 @@ export default function Game() {
         throw new Error('Failed to fetch');
       }
       const data = await res.json();
-      setChars(data);
+      const updatedData = data.chars.map(char => ({ ...char, checked: false }));
+      setChars(updatedData);
+      console.log(updatedData);
     } catch (error) {
       setError(error);
     } 
@@ -47,8 +54,10 @@ export default function Game() {
     const interval = setInterval(() => {
       setTime(prevTime => prevTime + 100);
     }, 100);
+    if (gameOver)
+      clearInterval(interval);
     return () => clearInterval(interval);
-  },[]);
+  },[gameOver]);
 
   // To show popup with list of characters when image is clicked
   useEffect(() => {
@@ -86,8 +95,8 @@ export default function Game() {
       <div className="main-content">
         <div className="char-info">
           <p>{error ? error.message: ''}</p>
-          {chars.chars && chars.chars.map((item) => (
-            <p key={item._id} className={`char-name`}>{item.name}</p>
+          {chars && chars.map((item) => (
+            <p key={item._id} className='char-name'>{item.name}</p>
           ))}
         </div>
         <ImageSelector imageUrl="findWaldo.jpg?url" onSelectionChange={handleSelectionChange} />
@@ -98,7 +107,9 @@ export default function Game() {
         onClose={handleClosePopup} 
         onSelect={handleSelectionChange} 
         xPercent={xPercent}
-        yPercent={yPercent}/>
+        yPercent={yPercent}
+        chars={chars}
+        setGameOver={handleGameOver}/>
         </div>}
       </div>  
   )

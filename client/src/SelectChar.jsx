@@ -1,36 +1,9 @@
-import { useEffect, useState, useRef } from "react"
+import { useState, useRef } from "react"
 import propTypes from 'prop-types'
 
-export default function SelectChar({ onClose, xPercent, yPercent }) {
-  const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
+export default function SelectChar({ onClose, xPercent, yPercent, chars, setGameOver}) {
   const [error, setError] = useState(null);
-  const [correctElements, setCorrectElements] = useState({}); // State to track correctness of each element
   const bgRef = useRef(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        setLoading(true);
-        const res = await fetch('http://localhost:3000/v1/api/chars', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        if (!res.ok) {
-          throw new Error('Failed to fetch');
-        }
-        const data = await res.json();
-        setFormData(data);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
 
   // If we click outside of the popup, the popup will close
   const handleClickOutside = (event) => {
@@ -40,7 +13,7 @@ export default function SelectChar({ onClose, xPercent, yPercent }) {
   };
 
   // when user clicks on a name, we send a post request with name and coordinates to verify whether the coordinates are correct
-  const handleSubmit = async (e, name, xPercent, yPercent, id) => {
+  const handleSubmit = async (e, name, xPercent, yPercent) => {
     e.preventDefault();
     // const target = e.currentTarget;
     try {
@@ -60,22 +33,16 @@ export default function SelectChar({ onClose, xPercent, yPercent }) {
         return;
       }
 
-      // if(data.message === 'Correct'){
-      //   console.log('Adding class');
-      //   target.classList.add('cross-char');
-      // }
-
-      // const updatedCorrectElements = { ...correctElements }; // Create a copy of correctElements
-      // updatedCorrectElements[itemId] = data.message === 'Correct'; // Update correctness for the current item
-      // setCorrectElements(updatedCorrectElements); // Update the state
-
       if(data.message === 'Correct'){
-      setCorrectElements(prevState => ({
-        ...prevState,
-        [id]: data.message === 'Correct'
-      }));
+        onClose();
+        chars.map(item => {
+          if(item.name === name)
+            item.checked = true;
+        const checkDone = chars.filter(item => item.checked = false)
+        if (checkDone.length === 0)
+          setGameOver();
+        })
     }
-      console.log(correctElements),
       // Setting any previous error to null so we don't display it on screen
       setError(null);
     } catch (error) {
@@ -83,20 +50,11 @@ export default function SelectChar({ onClose, xPercent, yPercent }) {
     }
   };
 
-  if (loading) {
-    return (
-      <div id="bg" ref={bgRef} onClick={handleClickOutside}>
-        <div className='select-char-container'>
-          <p className='char-name'>Loading....</p>
-        </div>
-      </div>)
-  }
-
   if (error) {
     return (
       <div id="bg" ref={bgRef} onClick={handleClickOutside}>
         <div className='select-char-container'>
-          <p className='char-name'>{error.message}</p>
+          <p className='popup-char-name'>{error.message}</p>
         </div>
       </div>)
   }
@@ -104,9 +62,8 @@ export default function SelectChar({ onClose, xPercent, yPercent }) {
   return (
     <div id="bg" ref={bgRef} onClick={handleClickOutside}>
       <div className='select-char-container'>
-        {formData.chars && formData.chars.map((item) => (
-          // <p key={item._id} className='char-name' onClick={(e) => handleSubmit(e, item.name, xPercent, yPercent)}>{item.name}</p>
-          <p key={item._id} className={`char-name ${correctElements[item._id] ? 'cross-char' : ''}`} onClick={(e) => handleSubmit(e, item.name, xPercent, yPercent, item._id)}>{item.name}</p>
+        {chars && chars.map((item) => (
+          <p key={item._id} className='popup-char-name' onClick={(e) => handleSubmit(e, item.name, xPercent, yPercent)}>{item.name}</p>
         ))}
       </div>
     </div>
@@ -117,4 +74,6 @@ SelectChar.propTypes = {
   onClose: propTypes.func,
   xPercent: propTypes.number,
   yPercent: propTypes.number,
+  chars: propTypes.array,
+  setGameOver: propTypes.func,
 };
