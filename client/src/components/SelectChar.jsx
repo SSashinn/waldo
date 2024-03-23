@@ -15,7 +15,6 @@ export default function SelectChar({ onClose, xPercent, yPercent, chars, setGame
   // when user clicks on a name, we send a post request with name and coordinates to verify whether the coordinates are correct
   const handleSubmit = async (e, name, xPercent, yPercent) => {
     e.preventDefault();
-    // const target = e.currentTarget;
     try {
       const res = await fetch('http://localhost:3000/v1/api/coordinates', {
         method: 'POST',
@@ -39,7 +38,6 @@ export default function SelectChar({ onClose, xPercent, yPercent, chars, setGame
           if(item.name === name)
             item.checked = true;
         const checkDone = chars.filter(item => item.checked === false)
-        console.log(checkDone)
         if (checkDone.length === 0)
           setGameOver();
         })

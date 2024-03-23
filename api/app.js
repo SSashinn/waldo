@@ -2,6 +2,7 @@ import express, { urlencoded } from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 dotenv.config();
 
 // Importing routes
@@ -14,6 +15,7 @@ const PORT = 3000;
 // To access the req body as json
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 // Setting up cors
 app.use(cors());

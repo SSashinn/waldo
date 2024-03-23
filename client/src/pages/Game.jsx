@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react"
-import ImageSelector from "../ImageSelector";
-import SelectChar from "../SelectChar";
+import ImageSelector from "../components/ImageSelector";
+import SelectChar from "../components/SelectChar";
 
 export default function Game() {
   const [showSelectChar, setShowSelectChar] = useState(false);
