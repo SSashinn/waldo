@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react"
 import ImageSelector from "../components/ImageSelector";
 import SelectChar from "../components/SelectChar";
 import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Game() {
   const [showSelectChar, setShowSelectChar] = useState(false);
@@ -11,9 +12,10 @@ export default function Game() {
   const [yPercent, setYPercent] = useState(null);
   const [chars, setChars] = useState([]);
   const [error, setError] = useState(null);
-  const[gameOver, setGameOver] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
 
-  const {user} = useAuth();
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleGameOver = () => {
     setGameOver(true);
@@ -44,7 +46,7 @@ export default function Game() {
       setChars(updatedData);
     } catch (error) {
       setError(error);
-    } 
+    }
   }
 
   useEffect(() => {
@@ -56,10 +58,36 @@ export default function Game() {
     const interval = setInterval(() => {
       setTime(prevTime => prevTime + 100);
     }, 100);
-    if (gameOver)
+    if (gameOver) {
       clearInterval(interval);
+      navigate('/');
+      if (user) {
+        const { highScore } = user.userData;
+        if (time < highScore) {
+          (async () => {
+            try {
+              const res = await fetch('http://localhost:3000/v1/api/highscore', {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ _id: user.userData._id, highScore: time }),
+              });
+
+              if (!res.ok) {
+                throw new Error('Failed to update highscore');
+              }
+
+              // Update user's highscore in context or state if needed
+            } catch (error) {
+              console.error('Error updating highscore:', error);
+            }
+          })();
+        }
+      }
+    }
     return () => clearInterval(interval);
-  },[gameOver]);
+  }, [gameOver]);
 
   // To show popup with list of characters when image is clicked
   useEffect(() => {
@@ -88,19 +116,19 @@ export default function Game() {
   return (
     <div>
       <div className="timer-heading-container">
-          <h2>TIMER: {formatTime(time)}</h2>
-          <div className="heading">
-            <h2>WHERE IS WALDO?</h2>
-            <h3>Try to find waldo as soon as possible</h3>
-          </div>
-          {user && <h2>{`HIGHSCORE : ${formatTime(user.userData.highScore)}`} </h2>}
+        <h2>TIMER: {formatTime(time)}</h2>
+        <div className="heading">
+          <h2>WHERE IS WALDO?</h2>
+          <h3>Try to find waldo as soon as possible</h3>
+        </div>
+        {user && <h2>{`HIGHSCORE : ${formatTime(user.userData.highScore)}`} </h2>}
       </div>
       <div className="main-content">
         <div className="char-info">
-          <p>{error ? error.message: ''}</p>
+          <p>{error ? error.message : ''}</p>
           {chars && chars.map((item) => (
             <div key={item._id}>
-              <img src={item.imgUrl} height='100px' width='100px'/>
+              <img src={item.imgUrl} height='100px' width='100px' />
               <p key={item._id} className={`char-name ${item.checked ? 'checked' : ''}`}>{item.name}</p>
             </div>
           ))}
@@ -109,14 +137,14 @@ export default function Game() {
       </div>
 
       {showSelectChar && <div ref={selectCharRef}>
-        <SelectChar 
-        onClose={handleClosePopup} 
-        onSelect={handleSelectionChange} 
-        xPercent={xPercent}
-        yPercent={yPercent}
-        chars={chars}
-        setGameOver={handleGameOver}/>
-        </div>}
-      </div>  
+        <SelectChar
+          onClose={handleClosePopup}
+          onSelect={handleSelectionChange}
+          xPercent={xPercent}
+          yPercent={yPercent}
+          chars={chars}
+          setGameOver={handleGameOver} />
+      </div>}
+    </div>
   )
 }

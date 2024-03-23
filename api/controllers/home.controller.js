@@ -59,5 +59,15 @@ const verifyCoordinate = async (req, res, next) => {
   }
 };
 
-
-export { users, makeChar, getChar, verifyCoordinate };
+const updateScore = async(req, res, next) => {
+  try {
+    const {highScore, _id} = req.body;
+    const user = await User.findByIdAndUpdate(_id, {highScore}, {new: true}).exec();
+    if (!user)
+      return res.status(404).json({ message: 'User not found' });
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+}
+export { users, makeChar, getChar, verifyCoordinate, updateScore };
