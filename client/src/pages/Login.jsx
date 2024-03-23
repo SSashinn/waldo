@@ -24,14 +24,13 @@ export default function Login() {
       });
 
       const data = await res.json();
-      console.log(data)
       // If there is an error, we will store it to display to the user later
       if (data.status >= 400) {
         setError(data.message);
         setLoading(false);
         return;
       }
-      login(data.token);
+      login(data);
       // If there is no error, we will set the loading to false
       setLoading(false);
       // Setting any previous error to null so we don't display it on screen

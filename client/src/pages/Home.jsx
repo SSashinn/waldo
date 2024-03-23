@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Home() {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const {user, logout} = useAuth();
 
   useEffect(() => {
     async function fetchData() {
@@ -48,10 +50,18 @@ export default function Home() {
           <button type="button" className='start-btn'>START NOW</button>
         </Link>
         <div id='auth-link'>
-          <span>Want to save your highscore, then </span>
-          <Link to='/signup'><span>signup</span></Link>
-          <span> or </span>
-          <Link to='/login'><span>login</span></Link>
+          {user
+          ?<div>
+            <button className='start-btn' onClick={logout} type='button'>LOGOUT</button>
+          </div>
+          :<div>
+            <span>Want to save your highscore, then </span>
+            <Link to='/signup'><span>signup</span></Link>
+            <span> or </span>
+            <Link to='/login'><span>login</span></Link>
+          </div>
+           }
+          
         </div>
         <div id='highscore'>
           <h4>HIGHSCORE</h4>

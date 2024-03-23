@@ -94,8 +94,8 @@ body{
 
 .timer-heading-container{
   display: grid;
-  grid-template-columns: 30vw 40vw;
-  gap: 130px;
+  grid-template-columns: 30vw 25vw 30vw;
+  gap: 90px;
   padding: 10px;
 }
 

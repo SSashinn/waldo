@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react"
 import ImageSelector from "../components/ImageSelector";
 import SelectChar from "../components/SelectChar";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Game() {
   const [showSelectChar, setShowSelectChar] = useState(false);
@@ -11,6 +12,8 @@ export default function Game() {
   const [chars, setChars] = useState([]);
   const [error, setError] = useState(null);
   const[gameOver, setGameOver] = useState(false);
+
+  const {user} = useAuth();
 
   const handleGameOver = () => {
     setGameOver(true);
@@ -90,6 +93,7 @@ export default function Game() {
             <h2>WHERE IS WALDO?</h2>
             <h3>Try to find waldo as soon as possible</h3>
           </div>
+          {user && <h2>{`HIGHSCORE : ${formatTime(user.userData.highScore)}`} </h2>}
       </div>
       <div className="main-content">
         <div className="char-info">
